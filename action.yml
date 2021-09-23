@@ -1,0 +1,33 @@
+name: 'ALL-HW.com task execution'
+description: 'Run binary file on real hardware using all-hw.com service'
+inputs:
+  binary:
+    description: 'Binary for the task'
+    required: true
+  uart-in:
+    description: 'Input data for the task - pushed to default uart'
+    required: true
+  api-key:
+    description: 'API key for the all-hw.com service'
+    required: true
+  timeout:
+    description: 'Task timeout'
+    default: '60'
+    required: true
+outputs:
+  result-code: 
+    description: "Execution result code"
+    value: ${{ steps.wait_for_result.outputs.result }}
+  uart-out: 
+    description: "Output of the UART"
+    value: ${{ steps.wait_for_result.outputs.result }}
+runs:
+  using: "composite"
+  steps:
+    - name: Run the task
+      id: start_task
+      run: echo ::set-output name=token::`curl -X POST -F firmware=@${{ inputs.binary }} -F input=@${{ inputs.uart-in }} "https://cloud.all-hw.com/ci/usertask?timeout=${{ inputs.timeout }}&key=${{ inputs.api-key }}" 2>/dev/null`
+    - name: Wait for remote task ends
+      id: wait_for_result
+      timeout-minutes: 1
+      run: echo ::set-output name=result::`OUT=""; while [[ "x"$(echo "$OUT" | grep "\"status\":\"finished\"") == "x" ]]; do sleep 1; OUT=$(curl -X GET "https://cloud.all-hw.com/ci/usertask?id=${{ steps.start_task.outputs.token }}" 2>/dev/null); done; echo "$OUT"`
