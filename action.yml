@@ -15,6 +15,9 @@ inputs:
     default: '60'
     required: true
 outputs:
+  raw: 
+    description: "Raw output"
+    value: ${{ steps.wait_for_result.outputs.result }}
   result-code: 
     description: "Execution result code"
     value: ${{ fromJson(steps.wait_for_result.outputs.result).output }}
