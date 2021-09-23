@@ -20,10 +20,10 @@ outputs:
     value: ${{ steps.wait_for_result.outputs.result }}
   result-code: 
     description: "Execution result code"
-    value: ${{ fromJson(steps.wait_for_result.outputs.result).output }}
+    value: ${{ fromJson(steps.wait_for_result.outputs.result).code }}
   uart-out: 
     description: "Output of the UART"
-    value: ${{ fromJson(steps.wait_for_result.outputs.result).code }}
+    value: ${{ fromJson(steps.wait_for_result.outputs.result).output }}
   status: 
     description: "Output of the UART"
     value: ${{ fromJson(steps.wait_for_result.outputs.result).status }}
