@@ -35,4 +35,4 @@ runs:
       id: wait_for_result
       run: echo ::set-output name=result::`OUT=""; while [[ "x"$(echo "$OUT" | grep "\"status\":\"finished\"") == "x" ]]; do sleep 1; OUT=$(curl -X GET "https://cloud.all-hw.com/ci/usertask?id=${{ steps.start_task.outputs.token }}" 2>/dev/null); done; echo "$OUT"`
       shell: bash
-
+    
