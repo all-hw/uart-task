@@ -17,10 +17,13 @@ inputs:
 outputs:
   result-code: 
     description: "Execution result code"
-    value: ${{ steps.wait_for_result.outputs.result }}
+    value: ${{ fromJson(steps.wait_for_result.outputs.result).output }}
   uart-out: 
     description: "Output of the UART"
-    value: ${{ steps.wait_for_result.outputs.result }}
+    value: ${{ fromJson(steps.wait_for_result.outputs.result).code }}
+  status: 
+    description: "Output of the UART"
+    value: ${{ fromJson(steps.wait_for_result.outputs.result).status }}
 runs:
   using: "composite"
   steps:
