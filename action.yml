@@ -14,6 +14,10 @@ inputs:
     description: 'Task timeout'
     default: '60'
     required: true
+  baudrate:
+    description: 'UART baudate'
+    default: '115200'
+    required: true
 outputs:
   raw: 
     description: "Raw output"
@@ -32,7 +36,7 @@ runs:
   steps:
     - name: Run the task
       id: start_task
-      run: echo ::set-output name=token::`curl -X POST -F firmware=@${{ inputs.binary }} -F input=@${{ inputs.uart-in }} "https://cloud.all-hw.com/ci/usertask?timeout=${{ inputs.timeout }}&key=${{ inputs.api-key }}" 2>/dev/null`
+      run: echo ::set-output name=token::`curl -X POST -F firmware=@${{ inputs.binary }} -F input=@${{ inputs.uart-in }} "https://cloud.all-hw.com/ci/usertask?version=V3&core=M55_0&log=0&rate=${{ inputs.baudrate }}&timeout=${{ inputs.timeout }}&key=${{ inputs.api-key }}" 2>/dev/null`
       shell: bash
     - name: Wait for remote task ends
       id: wait_for_result
